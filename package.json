@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bl": "^1.1.2"
+    "async": "^2.1.2",
+    "bl": "^1.1.2",
+    "concat-stream": "^1.5.2"
   }
 }

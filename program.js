@@ -1,22 +1,37 @@
 /*
-HTTP COLLECT (Exercise 8 of 13)
+JUGGLING ASYNC (Exercise 9 of 13)
 
-Write a program that performs an HTTP GET request to a URL provided to you as the first command-line argument. Collect all data from the server (not just the first "data" event) and then write two lines to the console (stdout).
+This problem is the same as the previous problem (HTTP COLLECT) in that you need to use http.get(). However, this time you will be provided with three URLs as the first three command-line arguments.
 
-The first line you write should just be an integer representing the number of characters received from the server. The second line should contain the complete String of characters sent by the server.
+You must collect the complete content provided to you by each of the URLs and print it to the console (stdout). You don't need to print out the length, just the data as a String; one line per URL. The catch is that you must print them out in the same order as the URLs are provided to you as command-line arguments.
 */
 
 var http = require('http');
-var requiredUrl = process.argv[2];
-var bl = require('bl');
+var async = require('async');
+var urls = process.argv.slice(2);
+var concatStream = require('concat-stream');
 
-http.get( requiredUrl, function (response) {
- response.pipe( bl(handleFullStream) )
+var urlGets = urls.map(function( item, i ) {
+
+	return function(callback){
+		http.get(item, function(response) {
+
+			response.setEncoding('utf8');
+			function handleResponse( responseFromServer ) {
+				callback(null, responseFromServer);
+			}
+
+			response.pipe( concatStream(handleResponse) );
+
+		})
+	}
 })
 
-function handleFullStream(err, data) {
- if (err) return console.error(err)
- data = data.toString()
- console.log(data.length)
- console.log(data)
-}
+async.series( urlGets, function(err, responses) {
+	if (err) throw err;
+	responses.forEach(function(response, i) {
+		console.log(response);
+	})
+});
+
+// node program.js http://www.google.com http.//www.skylabcoders.com http://www.softonic.com
