@@ -1,7 +1,10 @@
-var result = 0
+var fs = require('fs')
 
-for (var i = 2; i < process.argv.length; i++) {
- result += Number(process.argv[i])
-}
+var contents = fs.readFileSync(process.argv[2])
+var lines = contents.toString().split('\n').length - 1
+console.log(lines)
 
-console.log(result)
+// note you can avoid the .toString() by passing 'utf8' as the
+// second argument to readFileSync, then you'll get a String!
+//
+// fs.readFileSync(process.argv[2], 'utf8').split('\n').length - 1

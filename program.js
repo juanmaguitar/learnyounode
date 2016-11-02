@@ -1,11 +1,16 @@
-// https://nodejs.org/docs/latest/api/process.html#process_process_argv
+/*
 
-var sum=0
+MY FIRST I/O! (Exercise 3 of 13)
 
-process.argv.forEach( function(item,i) {
-	if (i>=2) {
-		sum += parseInt(item,10);
-	}
-})
+Write a program that uses a single synchronous filesystem operation to read a file and print the number of newlines (\n) it contains to the console (stdout), similar to running cat file | wc -l.
 
-console.log(sum);
+The full path to the file to read will be provided as the first command-line argument (i.e., process.argv[2]). You do not need to make your own test file.
+*/
+
+var fs = require('fs')
+var nameFile = process.argv[2];
+
+var contentFile = fs.readFileSync(nameFile).toString()
+var numNewlines = contentFile.split('\n').length - 1;
+
+console.log (numNewlines)
