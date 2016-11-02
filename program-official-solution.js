@@ -1,11 +1,14 @@
 var fs = require('fs')
-var file = process.argv[2]
+var path = require('path')
 
-fs.readFile(file, function (err, contents) {
- if (err) {
-   return console.log(err)
- }
- // fs.readFile(file, 'utf8', callback) can also be used
- var lines = contents.toString().split('\n').length - 1
- console.log(lines)
+var folder = process.argv[2]
+var ext = '.' + process.argv[3]
+
+fs.readdir(folder, function (err, files) {
+ if (err) return console.error(err)
+ files.forEach(function (file) {
+   if (path.extname(file) === ext) {
+     console.log(file)
+   }
+ })
 })
