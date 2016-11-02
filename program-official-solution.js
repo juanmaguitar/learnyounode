@@ -1,20 +1,10 @@
-var net = require('net')
+var http = require('http')
+var fs = require('fs')
 
-function zeroFill (i) {
- return (i < 10 ? '0' : '') + i
-}
+var server = http.createServer(function (req, res) {
+ res.writeHead(200, { 'content-type': 'text/plain' })
 
-function now () {
- var d = new Date()
- return d.getFullYear() + '-' +
-   zeroFill(d.getMonth() + 1) + '-' +
-   zeroFill(d.getDate()) + ' ' +
-   zeroFill(d.getHours()) + ':' +
-   zeroFill(d.getMinutes())
-}
-
-var server = net.createServer(function (socket) {
- socket.end(now() + '\n')
+ fs.createReadStream(process.argv[3]).pipe(res)
 })
 
 server.listen(Number(process.argv[2]))
